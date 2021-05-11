@@ -13,9 +13,15 @@ var PORT = process.env.PORT || 3000;
 // Sets express server to handle data parsing
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-
 // Serve static files 
 app.use(express.static(path.join(__dirname, './public')));
+
+
+// ========== VARIABLES TO READ AND WRITE FILES ==========
+
+const writefileAsync = util.promisify(fs.writeFile);
+const readFileAsync = util.promisify(fs.readFile);
+let allNotes;
 
 
 // ========== HTML ROUTES ==========
@@ -48,31 +54,24 @@ app.get("/api/notes", function (req, res) {
 
 // API to write all newly inputted notes to the json file
 app.post("/api/notes", function (req, res) {
-    var newNotes = req.body;
+    var newNote = req.body;
     readFileAsync(path.join(__dirname, "./db/db.json"), "utf8")
         .then(function (data) {
             allNotes = JSON.parse(data);
-            if (newNotes.id || newNotes.id === 0) {
-                let currNote = allNotes[newNotes.id];
-                currNote.title = newNotes.title;
-                currNote.text = newNotes.text;
+            if (newNote.id || newNote.id === 0) {
+                let currNote = allNotes[newNote.id];
+                currNote.title = newNote.title;
+                currNote.text = newNote.text;
             } else {
-                allNotes.push(newNotes);
+                allNotes.push(newNote);
             }
             writefileAsync(path.join(__dirname, "./db/db.json"), JSON.stringify(allNotes))
                 .then(function () {
-                    console.log("Wrote db.json");
+                    console.log("Note saved");
                 })
         });
-    res.json(newNotes);
+    res.json(newNote);
 });
-
-
-// ========== VARIABLES TO READ AND WRITE FILES ==========
-
-const writefileAsync = util.promisify(fs.writeFile);
-const readFileAsync = util.promisify(fs.readFile);
-let allNotes;
 
 
 // ========== LISTEN ========== 

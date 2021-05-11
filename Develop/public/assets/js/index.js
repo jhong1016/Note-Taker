@@ -65,11 +65,11 @@ const renderActiveNote = () => {
 };
 
 const handleNoteSave = () => {
-  const newNote = {
+  const newNotes = {
     title: noteTitle.value,
     text: noteText.value,
   };
-  saveNote(newNote).then(() => {
+  saveNote(newNotes).then(() => {
     getAndRenderNotes();
     renderActiveNote();
   });
