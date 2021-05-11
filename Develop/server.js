@@ -49,7 +49,7 @@ app.post("/api/notes", function (req, res) {
             writefileAsync(path.join(__dirname, "./db/db.json"), JSON.stringify(allNotes))
                 .then(function () {
                     console.log("Note saved.");
-                })
+                });
         });
     res.json(newNotes);
 });
@@ -64,7 +64,7 @@ app.delete('/api/notes/:id', function (req, res) {
             writefileAsync(path.join(__dirname, "./db/db.json"), JSON.stringify(allNotes))
                 .then(function () {
                     console.log("Note deleted.");
-                })
+                });
         });
     res.json(deleteId);
 });
