@@ -2,9 +2,8 @@
 const express = require("express");
 // Require path for filename paths
 const path = require("path");
-// Require fs and util to read and write to files
+// Require fs to read and write to files
 const fs = require('fs');
-const util = require('util');
 // Location to store inputte dnotes
 const db = require("./db/db.json");
 
@@ -18,24 +17,16 @@ app.use(express.urlencoded({ extended: true }));
 // Serve static files 
 app.use(express.static(path.join(__dirname, './public')));
 
-// Variables to read and write files
-const writefileAsync = util.promisify(fs.writeFile);
-const readFileAsync = util.promisify(fs.readFile);
-var allNotes;
-
 const id = 0;
 
 // API call response for all inputted notes, and send results to the browser as an array of object
 app.get("/api/notes", function (req, res) {
-    readFileAsync(path.join(__dirname, "./db/db.json"), "utf8")
-        .then(function (data) {
-            return res.json(JSON.parse(data));
-        });
+    res.sendFile(path.join(__dirname, './db/db.json'), "utf8")
 });
 
 // API to write all newly inputted notes to the json file
 app.post("/api/notes", function (req, res) {
-    var newNotes = req.body;
+    var newNotes = JSON.stringify(req.body);
     readFileAsync(path.join(__dirname, "./db/db.json"), "utf8")
         .then(function (data) {
             allNotes = JSON.parse(data);
