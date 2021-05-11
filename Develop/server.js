@@ -15,8 +15,25 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, './public')));
 
 
+// ========== HTML ROUTES ==========
 
-// Listen
+// The below points our server to set up routes
+app.get("/notes", function (req, res) {
+    res.sendFile(path.join(__dirname, "./public/notes.html"));
+});
+
+app.get("/", function (req, res) {
+    res.sendFile(path.join(__dirname, "./public/index.html"));
+});
+
+// (catch all other urls) get home page
+app.get("*", function (req, res) {
+	res.sendFile(path.join(__dirname, "./public/index.html"));
+});
+
+
+// ========== LISTEN ========== 
+
 app.listen(PORT, function() {
     console.log(`Server listening on ${PORT}`);
 });
