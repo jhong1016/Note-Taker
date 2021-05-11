@@ -57,7 +57,7 @@ app.post("/api/notes", function (req, res) {
                 currNote.title = newNotes.title;
                 currNote.text = newNotes.text;
             } else {
-                allNotes.push(newNote);
+                allNotes.push(newNotes);
             }
             writefileAsync(path.join(__dirname, "./db/db.json"), JSON.stringify(allNotes))
                 .then(function () {
