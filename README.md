@@ -24,4 +24,4 @@ SO THAT I can organize my thoughts and keep track of tasks I need to complete
 
 Files from "Developed" folder were deleted and new files were created in the main directory, which has accidentally deleted ALL commitments :( . 
 
-However, past history of commitments can be accessed by clicking on 'server.js' file, then clickingon 'History' at the top right corner, and then clicking on "screenshot added to assets folder and files copy/pasted from develop..." commitment link. This will lead markerto all previous commits' history.
+However, past history of commitments can be accessed by clicking on 'server.js' file, then clicking on 'History' at the top right corner, and then clicking on "screenshot added to assets folder and files copy/pasted from develop..." commitment link. This will lead marker to all previous commits' history.
