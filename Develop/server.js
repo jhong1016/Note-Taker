@@ -21,7 +21,7 @@ const id = 0;
 
 // API call response for all inputted notes, and send results to the browser as an array of object
 app.get("/api/notes", function (req, res) {
-    res.sendFile(path.join(__dirname, './db/db.json'), "utf8")
+    res.sendFile(path.join(__dirname, './db/db.json'));
 });
 
 // API to write all newly inputted notes to the json file
@@ -64,16 +64,24 @@ app.post("/api/notes", function (req, res) {
 // API to delete individual notes
 app.delete('/api/notes/:id', function (req, res) {
 	var deleteId = req.params.id;
-	readFileAsync(path.join(__dirname, "./db/db.json"), "utf8")
-        .then(function (data) {
-            allNotes = JSON.parse(data);
-            allNotes.splice(deleteId, 1);
-            writefileAsync(path.join(__dirname, "./db/db.json"), JSON.stringify(allNotes))
-                .then(function () {
-                    console.log("Note deleted.");
-                });
-        });
-    res.json(deleteId);
+    console.log(req.params.id);
+
+	fs.readFile('./db/db.json', 'utf8', (err, data) => {
+		let dataArray = JSON.parse(data);
+
+		dataArray = dataArray.filter(function (note) {
+			return note.id != deleteId;
+		});
+
+		let newDataString = JSON.stringify(dataArray);
+
+		fs.writeFile('./db/db.json', newDataString, function (err) {
+			if (err) throw err;
+			console.log('Note deleted.');
+		});
+	});
+
+	res.sendFile(path.join(__dirname, './db/db.json'))
 });
 
 // Get homepage when the 'GetStarted' button is clicked
