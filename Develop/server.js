@@ -26,23 +26,39 @@ app.get("/api/notes", function (req, res) {
 
 // API to write all newly inputted notes to the json file
 app.post("/api/notes", function (req, res) {
-    var newNotes = JSON.stringify(req.body);
-    readFileAsync(path.join(__dirname, "./db/db.json"), "utf8")
-        .then(function (data) {
-            allNotes = JSON.parse(data);
-            if (newNotes.id || newNotes.id === 0) {
-                let currentNote = allNotes[newNotes.id];
-                currentNote.title = newNotes.title;
-                currentNote.text = newNotes.text;
-            } else {
-                allNotes.push(newNotes);
-            }
-            writefileAsync(path.join(__dirname, "./db/db.json"), JSON.stringify(allNotes))
-                .then(function () {
-                    console.log("Note saved.");
-                });
-        });
-    res.json(newNotes);
+    var newNote = JSON.stringify(req.body);
+
+    fs.readFile('./db/db.json', 'utf8', (err, data) => {
+		if (err) throw err;
+
+		let dataArray = JSON.parse(data);
+		let lastNoteId = dataArray[dataArray.length - 1].id;
+
+		if (lastNoteId === undefined ){
+			lastNoteId = 0;
+		}
+		console.log("last note id", lastNoteId);
+
+		let newId = lastNoteId + 1;
+		console.log("new ID", newId);
+
+		newNote = '{' + `"id":${newId},` + newNote.substr(1);
+		let newNoteJSON = JSON.parse(newNote);
+		console.log('newNoteJSON', newNoteJSON);
+		
+		console.log('dataArray', dataArray);
+		dataArray.push(newNoteJSON);
+		console.log('updated dataArray', dataArray);
+
+		let newDataString = JSON.stringify(dataArray);
+		console.log(newDataString);
+
+		fs.writeFile('./db/db.json', newDataString, function (err) {
+			if (err) throw err;
+			console.log('Note saved.');
+		});
+	});
+
 });
 
 // API to delete individual notes
