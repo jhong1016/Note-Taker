@@ -4,12 +4,9 @@ const express = require("express");
 const path = require("path");
 // Require fs to read and write to files
 const fs = require('fs');
-// Location to store inputte dnotes
-const db = require("./db/db.json");
 
-// Creates express server
+// Creates express server and sets initial port
 const app = express();
-// Sets initial port
 const PORT = process.env.PORT || 8000;
 
 // Sets express server to handle data parsing
@@ -17,17 +14,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, './public')));
 
-//  Initialize notesData
-let notesData = [];
+//  Initialize addedNote
+let addedNote = [];
 
 // API call response for all inputted notes, and send results to the browser as an array of object
 app.get("/api/notes", function (req, res) {
 	try {
 		// reads the notes from the json file
-		notesData = fs.readFileSync("./db/db.json", "utf8");
-		console.log("Add your note.");
+		addedNote = fs.readFileSync("./db/db.json", "utf8");
+		console.log("Note saved.");
 		// parse the data to get an array of objects
-		notesData = JSON.parse(notesData);
+		addedNote = JSON.parse(addedNote);
 
 		// handles errors
 		} catch (err) {
@@ -36,30 +33,30 @@ app.get("/api/notes", function (req, res) {
 		}
 
 		// send objects to the browser
-		res.json(notesData);
+		res.json(addedNote);
 });
 
 // API to write all newly inputted notes to the json file
 app.post("/api/notes", function (req, res) {
 	try {
 		// reads the json file
-		notesData = fs.readFileSync("./db/db.json", "utf8");
-		console.log(notesData);
+		addedNote = fs.readFileSync("./db/db.json", "utf8");
+		console.log(addedNote);
 		// parse the data to get an array of objects
-		notesData = JSON.parse(notesData);
+		addedNote = JSON.parse(addedNote);
 		// set new notes by using id
-		req.body.id = notesData.length;
+		req.body.id = addedNote.length;
 		// add new notes to the array of objects
-		notesData.push(req.body);
+		addedNote.push(req.body);
 		// make it string(stringify) to write to json file
-		notesData = JSON.stringify(notesData);
+		addedNote = JSON.stringify(addedNote);
 		// writes new notes to jason file
-		fs.writeFile("./db/db.json", notesData, "utf8", function(err) {
+		fs.writeFile("./db/db.json", addedNote, "utf8", function(err) {
 		// handles errors
 		if (err) throw err;
 		});
 		// change data back to an array of objects
-		res.json(JSON.parse(notesData));
+		res.json(JSON.parse(addedNote));
 	
 		// handles errors
 		} catch (err) {
@@ -72,22 +69,22 @@ app.post("/api/notes", function (req, res) {
 app.delete('/api/notes/:id', function (req, res) {
 	try {
 		// reads the json file
-		notesData = fs.readFileSync("./db/db.json", "utf8");
+		addedNote = fs.readFileSync("./db/db.json", "utf8");
 		// parse data to get an array of the objects
-		notesData = JSON.parse(notesData);
+		addedNote = JSON.parse(addedNote);
 		// delete selected note from the array
-		notesData = notesData.filter(function(note) {
+		addedNote = addedNote.filter(function(note) {
 		return note.id != req.params.id;
 		});
 		// make it string(stringify) to write to json file
-		notesData = JSON.stringify(notesData);
+		addedNote = JSON.stringify(addedNote);
 		// write new notes to the file
-		fs.writeFile("./db/db.json", notesData, "utf8", function(err) {
+		fs.writeFile("./db/db.json", addedNote, "utf8", function(err) {
 		// error handling
 		if (err) throw err;
 		});
 		// change data back to an array of objects
-		res.send(JSON.parse(notesData));
+		res.send(JSON.parse(addedNote));
 	
 		// handles errors
 		} catch (err) {
