@@ -15,7 +15,13 @@ SO THAT I can organize my thoughts and keep track of tasks I need to complete
 - Application should allow users to delete previously saved notes.
 
 ### Home Page
-![Home Page](/__________________________________________)
+![Home Page](public/assets/screenshot.JPG)
 
 ## Deployed Link
 [Note Taker](https://______________________________/)
+
+### Issues Encountered
+
+Files from "Developed" folder were deleted and new files were created in the main directory, which has accidentally deleted ALL commitments :( . 
+
+However, past history of commitments can be accessed by clicking on 'server.js' file, then clickingon 'History' at the top right corner, and then clicking on "screenshot added to assets folder and files copy/pasted from develop..." commitment link. This will lead markerto all previous commits' history.
