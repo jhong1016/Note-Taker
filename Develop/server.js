@@ -27,6 +27,7 @@ app.get("/api/notes", function (req, res) {
 // API to write all newly inputted notes to the json file
 app.post("/api/notes", function (req, res) {
     var newNote = JSON.stringify(req.body);
+
 	fs.readFile('./db/db.json', 'utf8', (err, data) => {
 		if (err) throw err;
 
@@ -54,11 +55,33 @@ app.post("/api/notes", function (req, res) {
 
 		fs.writeFile('./db/db.json', newDataString, function (err) {
 			if (err) throw err;
-			console.log('Saved!');
+			console.log('Note saved');
 		});
 	});
 
 	res.sendFile(path.join(__dirname, './db/db.json'));
+});
+
+app.delete('/api/notes/:id', function (req, res) {
+	var deleteId = req.params.id;
+	console.log(req.params.id);
+	
+	fs.readFile('./db/db.json', 'utf8', (err, data) => {
+		let dataArray = JSON.parse(data);
+
+		dataArray = dataArray.filter(function (note) {
+			return note.id != deleteId;
+		});
+
+		let newDataString = JSON.stringify(dataArray);
+
+		fs.writeFile('./db/db.json', newDataString, function (err) {
+			if (err) throw err;
+			console.log('Saved');
+		});
+	});
+
+	res.sendFile(path.join(__dirname, './db/db.json'))
 });
 
 // Get homepage when the 'GetStarted' button is clicked
