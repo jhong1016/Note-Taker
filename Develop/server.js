@@ -34,11 +34,33 @@ app.get("*", function (req, res) {
 
 // ========== API ROUTES ==========
 
+// API call response for all inputted notes, and send results to the browser as an array of object
 app.get("/api/notes", function (req, res) {
     readFileAsync(path.join(__dirname, "./db/db.json"), "utf8")
         .then(function (data) {
             return res.json(JSON.parse(data));
         });
+});
+
+// API to write all newly inputted notes to the json file
+app.post("/api/notes", function (req, res) {
+    var newNotes = req.body;
+    readFileAsync(path.join(__dirname, "./db/db.json"), "utf8")
+        .then(function (data) {
+            allNotes = JSON.parse(data);
+            if (newNotes.id || newNotes.id === 0) {
+                let currNote = allNotes[newNotes.id];
+                currNote.title = newNotes.title;
+                currNote.text = newNotes.text;
+            } else {
+                allNotes.push(newNote);
+            }
+            writefileAsync(path.join(__dirname, "./db/db.json"), JSON.stringify(allNotes))
+                .then(function () {
+                    console.log("Wrote db.json");
+                })
+        });
+    res.json(newNotes);
 });
 
 
