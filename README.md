@@ -10,9 +10,7 @@ SO THAT I can organize my thoughts and keep track of tasks I need to complete
 
 ## Instructions
 
-- Application should allow users to create and save notes.
-- Application should allow users to view previously saved notes.
-- Application should allow users to delete previously saved notes.
+Application should allow users to create and save notes; view previously saved notes; and delete previously saved notes.
 
 ### Home Page
 ![Home Page](public/assets/screenshot.JPG)
