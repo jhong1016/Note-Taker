@@ -59,9 +59,9 @@ app.post("/api/notes", function (req, res) {
         .then(function (data) {
             allNotes = JSON.parse(data);
             if (newNote.id || newNote.id === 0) {
-                let currNote = allNotes[newNote.id];
-                currNote.title = newNote.title;
-                currNote.text = newNote.text;
+                let currentNote = allNotes[newNote.id];
+                currentNote.title = newNote.title;
+                currentNote.text = newNote.text;
             } else {
                 allNotes.push(newNote);
             }
@@ -78,5 +78,5 @@ app.post("/api/notes", function (req, res) {
 
 // Start the server on the port
 app.listen(PORT, function() {
-    console.log(`Server listening on ${PORT}`);
+    console.log("Server listening on PORT: " + PORT);
 });
