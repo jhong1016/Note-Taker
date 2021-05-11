@@ -7,8 +7,9 @@ const fs = require('fs');
 // Location to store inputte dnotes
 const db = require("./db/db.json");
 
-// Creates express server and set initial port
+// Creates express server
 const app = express();
+// Sets initial port
 const PORT = process.env.PORT || 8000;
 
 // Sets express server to handle data parsing
@@ -16,9 +17,26 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, './public')));
 
+//  Initialize notesData
+let notesData = [];
+
 // API call response for all inputted notes, and send results to the browser as an array of object
 app.get("/api/notes", function (req, res) {
-    res.sendFile(path.join(__dirname, './db/db.json'))
+	try {
+		// reads the notes from the json file
+		notesData = fs.readFileSync("./db/db.json", "utf8");
+		console.log("Add your note.");
+		// parse it so notes is an array of objects
+		notesData = JSON.parse(notesData);
+
+	// handles errors
+	} catch (err) {
+		console.log("\n error (in app.get.catch):");
+		console.log(err);
+	}
+
+	//   send objects to the browser
+	res.json(notesData);
 });
 
 // API to write all newly inputted notes to the json file
