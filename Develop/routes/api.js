@@ -8,13 +8,13 @@ module.exports = function(app) {
         // Converts new JSON Array back to string
         notes = JSON.stringify(notes);
         console.log (notes);
-        // Writes String back to db.json
-        fs.writeFileSync("./db/db.json", notes, function(err) {
+        // Writes string back to db.json
+        fs.writeFileSync("../db/db.json", notes, function(err){
             if (err) {
                 return console.log(err);
             }
         });
-	}
+    }
 
     // API call response for all inputted notes, and send results to the browser as an array of object
     app.get("/api/notes", function (req, res) {
@@ -25,7 +25,7 @@ module.exports = function(app) {
     app.post("/api/notes", function (req, res) {
 
         // Set unique id to entry
-        if (notesData.length == 0){
+        if (notesData.length == 0) {
             req.body.id = "0";
         } else {
             req.body.id = JSON.stringify(JSON.parse(notesData[notesData.length - 1].id) + 1);

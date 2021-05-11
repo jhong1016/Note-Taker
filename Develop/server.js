@@ -11,8 +11,8 @@ const PORT = process.env.PORT || 8000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Use public directory
-app.use(express.static("./public"));
+// Access files in "public" directory
+app.use(express.static("public"));
 
 // Include js files
 require("./routes/api.js")(app);
