@@ -2,8 +2,9 @@
 const express = require("express");
 // Require path for filename paths
 const path = require("path");
-// Require fs to read and write to files
+// Require fs and util to read and write to files
 const fs = require('fs');
+const util = require('util');
 // Location to store inputte dnotes
 const db = require("./db/db.json");
 
@@ -17,49 +18,40 @@ app.use(express.urlencoded({ extended: true }))
 // Serve static files 
 app.use(express.static(path.join(__dirname, './public')));
 
+// Variables to read and write files
+const writefileAsync = util.promisify(fs.writeFile);
+const readFileAsync = util.promisify(fs.readFile);
+var allNotes;
+
 const id = 0;
 
 // API call response for all inputted notes, and send results to the browser as an array of object
 app.get("/api/notes", function (req, res) {
-    res.sendFile(path.join(__dirname, './db/db.json'));
+    readFileAsync(path.join(__dirname, "./db/db.json"), "utf8")
+        .then(function (data) {
+            return res.json(JSON.parse(data));
+        });
 });
 
 // API to write all newly inputted notes to the json file
 app.post("/api/notes", function (req, res) {
-    var newNote = JSON.stringify(req.body);
-
-	fs.readFile('./db/db.json', 'utf8', (err, data) => {
-		if (err) throw err;
-
-		let dataArray = JSON.parse(data);
-		let lastNoteId = dataArray[dataArray.length - 1].id;
-
-		if (lastNoteId === undefined ){
-			lastNoteId = 0;
-		}
-		console.log("last note id", lastNoteId);
-
-		let newId = lastNoteId + 1;
-		console.log("new ID", newId);
-
-		newNote = '{' + `"id":${newId},` + newNote.substr(1);
-		let newNoteJSON = JSON.parse(newNote);
-		console.log('newNoteJSON', newNoteJSON);
-		
-		console.log('dataArray', dataArray);
-		dataArray.push(newNoteJSON);
-		console.log('updated dataArray', dataArray);
-
-		let newDataString = JSON.stringify(dataArray);
-		console.log(newDataString);
-
-		fs.writeFile('./db/db.json', newDataString, function (err) {
-			if (err) throw err;
-			console.log('Note saved');
-		});
-	});
-
-	res.sendFile(path.join(__dirname, './db/db.json'));
+    var newNotes = req.body;
+    readFileAsync(path.join(__dirname, "./db/db.json"), "utf8")
+        .then(function (data) {
+            allNotes = JSON.parse(data);
+            if (newNotes.id || newNotes.id === 0) {
+                let currNote = allNotes[newNotes.id];
+                currNote.title = newNotes.title;
+                currNote.text = newNotes.text;
+            } else {
+                allNotes.push(newNotes);
+            }
+            writefileAsync(path.join(__dirname, "./db/db.json"), JSON.stringify(allNotes))
+                .then(function () {
+                    console.log("Note saved.");
+                })
+        });
+    res.json(newNotes);
 });
 
 // Delete function
