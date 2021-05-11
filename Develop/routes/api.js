@@ -1,6 +1,6 @@
 // Require fs to read and write to files
 const fs = require('fs');
-const notesData = require("./db/db.json");
+const notesData = require("../db/db.json");
 
 module.exports = function(app) {
 
@@ -33,7 +33,7 @@ module.exports = function(app) {
         
         console.log("req.body.id: " + req.body.id);
 
-        // Pushes Body to JSON array
+        // Pushes body to JSON array
         notesData.push(req.body);
 
         // Write notes data to database
@@ -47,11 +47,16 @@ module.exports = function(app) {
     // API to delete individual notes from JSON file
     app.delete("/api/notes/:id", function (req, res) {
 
+        // Obtains id and converts to a string
+        let id = req.params.id.toString();
+        console.log(id);
+
         // Goes through notesArray searching for matching ID
         for (i=0; i < notesData.length; i++) {
             
             if (notesData[i].id == id) {
                 console.log("Deleted!");
+                
                 // Responds with deleted note
                 res.send(notesData[i]);
 

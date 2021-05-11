@@ -3,7 +3,6 @@ const express = require("express");
 // Require path for filename paths
 const path = require("path");
 
-
 // Creates express server and sets initial port
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -11,7 +10,7 @@ const PORT = process.env.PORT || 8000;
 // Sets express server to handle data parsing
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "./public")));
+app.use(express.static("./public"));
 
 // Include js files
 require("./routes/api.js")(app);
