@@ -8,8 +8,10 @@ const app = express();
 const PORT = process.env.PORT || 8000;
 
 // Sets express server to handle data parsing
-app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+// Use public directory
 app.use(express.static("./public"));
 
 // Include js files

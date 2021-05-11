@@ -38,7 +38,7 @@ module.exports = function(app) {
 
         // Write notes data to database
         writeToDB(notesData);
-        console.log(notesData);
+        console.log("Succesfully added new note!");
 
         // Returns new note in JSON file
         res.json(req.body);
@@ -56,7 +56,7 @@ module.exports = function(app) {
             
             if (notesData[i].id == id) {
                 console.log("Deleted!");
-                
+
                 // Responds with deleted note
                 res.send(notesData[i]);
 
