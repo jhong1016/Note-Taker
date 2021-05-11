@@ -8,9 +8,9 @@ module.exports = function(app){
     });
 
     // If no matching route is found default to index page
-    app.get("*", function (req, res) {
-        res.sendFile(path.join(__dirname, "../public/index.html"));
-    });
+    // app.get("*", function (req, res) {
+        // res.sendFile(path.join(__dirname, "../public/index.html"));
+    // });
 
     // Route to go to index page
     app.get("/", function(req, res){
