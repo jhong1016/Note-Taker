@@ -12,20 +12,19 @@ const app = express();
 const PORT = process.env.PORT || 8000;
 
 // Sets express server to handle data parsing
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, './public')));
-
-const id = 0;
 
 // API call response for all inputted notes, and send results to the browser as an array of object
 app.get("/api/notes", function (req, res) {
-    res.sendFile(path.join(__dirname, './db/db.json'));
+    res.sendFile(path.join(__dirname, './db/db.json'))
 });
 
 // API to write all newly inputted notes to the json file
 app.post("/api/notes", function (req, res) {
-    var newNote = JSON.stringify(req.body);
+
+    let newNote = JSON.stringify(req.body);
 
 	fs.readFile('./db/db.json', 'utf8', (err, data) => {
 		if (err) throw err;
@@ -61,9 +60,9 @@ app.post("/api/notes", function (req, res) {
 	res.sendFile(path.join(__dirname, './db/db.json'));
 });
 
-// Delete function
+// API to delete individual notes from the json file
 app.delete('/api/notes/:id', function (req, res) {
-	var deleteId = req.params.id;
+	let deleteId = req.params.id;
 	console.log(req.params.id);
 	
 	fs.readFile('./db/db.json', 'utf8', (err, data) => {
@@ -100,5 +99,5 @@ app.get("*", function (req, res) {
 
 // Start the server on the port
 app.listen(PORT, function() {
-    console.log(`Server listening on ${PORT}.`);
+    console.log(`Server listening on ${PORT}.`)
 });
