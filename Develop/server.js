@@ -17,7 +17,6 @@ app.use(express.urlencoded({ extended: true }));
 // Serve static files 
 app.use(express.static(path.join(__dirname, './public')));
 
-const id = 0;
 
 // API call response for all inputted notes, and send results to the browser as an array of object
 app.get("/api/notes", function (req, res) {
@@ -25,8 +24,9 @@ app.get("/api/notes", function (req, res) {
 });
 
 // API to write all newly inputted notes to the json file
+const id = 0;
 app.post("/api/notes", function (req, res) {
-    let newNote = JSON.stringify(req.body);
+    var newNote = JSON.stringify(req.body);
 
     fs.readFile('./db/db.json', 'utf8', (err, data) => {
 		if (err) throw err;
@@ -59,18 +59,19 @@ app.post("/api/notes", function (req, res) {
 		});
 	});
 
+	res.sendFile(path.join(__dirname, './db/db.json'));
 });
 
 // API to delete individual notes
 app.delete('/api/notes/:id', function (req, res) {
-	let deleteId = req.params.id;
+	var id = req.params.id;
     console.log(req.params.id);
 
 	fs.readFile('./db/db.json', 'utf8', (err, data) => {
 		let dataArray = JSON.parse(data);
 
 		dataArray = dataArray.filter(function (note) {
-			return note.id != deleteId;
+			return note.id != id;
 		});
 
 		let newDataString = JSON.stringify(dataArray);
@@ -81,7 +82,7 @@ app.delete('/api/notes/:id', function (req, res) {
 		});
 	});
 
-	res.sendFile(path.join(__dirname, './db/db.json'))
+	res.sendFile(path.join(__dirname, './db/db.json'));
 });
 
 // Get homepage when the 'GetStarted' button is clicked
