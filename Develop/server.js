@@ -62,6 +62,7 @@ app.post("/api/notes", function (req, res) {
 	res.sendFile(path.join(__dirname, './db/db.json'));
 });
 
+// Delete function
 app.delete('/api/notes/:id', function (req, res) {
 	var deleteId = req.params.id;
 	console.log(req.params.id);
