@@ -6,10 +6,11 @@ var path = require("path");
 var fs = require('fs');
 var util = require('util');
 
-// Create app
+// Creates express server and set initial port
 var app = express();
 var PORT = process.env.PORT || 3000;
 
+// Sets express server to handle data parsing
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
@@ -65,6 +66,13 @@ app.post("/api/notes", function (req, res) {
         });
     res.json(newNotes);
 });
+
+
+// ========== VARIABLES TO READ AND WRITE FILES ==========
+
+const writefileAsync = util.promisify(fs.writeFile);
+const readFileAsync = util.promisify(fs.readFile);
+let allNotes;
 
 
 // ========== LISTEN ========== 
