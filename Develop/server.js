@@ -9,14 +9,14 @@ const db = require("./db/db.json");
 
 // Creates express server and set initial port
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
 
 // Sets express server to handle data parsing
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// Serve static files 
 app.use(express.static(path.join(__dirname, './public')));
 
+const id = 0;
 
 // API call response for all inputted notes, and send results to the browser as an array of object
 app.get("/api/notes", function (req, res) {
@@ -24,11 +24,10 @@ app.get("/api/notes", function (req, res) {
 });
 
 // API to write all newly inputted notes to the json file
-const id = 0;
 app.post("/api/notes", function (req, res) {
     var newNote = JSON.stringify(req.body);
 
-    fs.readFile('./db/db.json', 'utf8', (err, data) => {
+	fs.readFile('./db/db.json', 'utf8', (err, data) => {
 		if (err) throw err;
 
 		let dataArray = JSON.parse(data);
@@ -62,16 +61,16 @@ app.post("/api/notes", function (req, res) {
 	res.sendFile(path.join(__dirname, './db/db.json'));
 });
 
-// API to delete individual notes
+// API to delete individual notes in json file
 app.delete('/api/notes/:id', function (req, res) {
-	var id = req.params.id;
-    console.log(req.params.id);
-
+	var deleteId = req.params.id;
+	console.log(req.params.id);
+	
 	fs.readFile('./db/db.json', 'utf8', (err, data) => {
 		let dataArray = JSON.parse(data);
 
 		dataArray = dataArray.filter(function (note) {
-			return note.id != id;
+			return note.id != deleteId;
 		});
 
 		let newDataString = JSON.stringify(dataArray);
@@ -82,7 +81,7 @@ app.delete('/api/notes/:id', function (req, res) {
 		});
 	});
 
-	res.sendFile(path.join(__dirname, './db/db.json'));
+	res.sendFile(path.join(__dirname, './db/db.json'))
 });
 
 // Get homepage when the 'GetStarted' button is clicked
