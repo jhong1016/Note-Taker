@@ -40,9 +40,9 @@ app.post("/api/notes", function (req, res) {
         .then(function (data) {
             allNotes = JSON.parse(data);
             if (newNotes.id || newNotes.id === 0) {
-                let currNote = allNotes[newNotes.id];
-                currNote.title = newNotes.title;
-                currNote.text = newNotes.text;
+                let currentNote = allNotes[newNotes.id];
+                currentNote.title = newNotes.title;
+                currentNote.text = newNotes.text;
             } else {
                 allNotes.push(newNotes);
             }
