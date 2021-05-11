@@ -1,6 +1,8 @@
-// Import express
+// Require express to interact with the front end
 var express = require("express");
+// Require path for filename paths
 var path = require("path");
+// Require fs and util to read and write to files
 var fs = require('fs');
 var util = require('util');
 
@@ -18,6 +20,7 @@ app.use(express.static(path.join(__dirname, './public')));
 // ========== HTML ROUTES ==========
 
 // The below points our server to set up routes
+// Get homepage when the 'GetStarted' button is clicked
 app.get("/notes", function (req, res) {
     res.sendFile(path.join(__dirname, "./public/notes.html"));
 });
@@ -26,7 +29,7 @@ app.get("/", function (req, res) {
     res.sendFile(path.join(__dirname, "./public/index.html"));
 });
 
-// (catch all other urls) get home page
+// If no matching route is found default to homepage
 app.get("*", function (req, res) {
 	res.sendFile(path.join(__dirname, "./public/index.html"));
 });
@@ -66,6 +69,7 @@ app.post("/api/notes", function (req, res) {
 
 // ========== LISTEN ========== 
 
+// Start the server on the port
 app.listen(PORT, function() {
     console.log(`Server listening on ${PORT}`);
 });
