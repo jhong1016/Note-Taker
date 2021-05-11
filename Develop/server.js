@@ -13,21 +13,22 @@ const PORT = process.env.PORT || 8000;
 // Sets express server to handle data parsing
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, './public')));
+app.use(express.static(path.join(__dirname, "./public")));
 
 module.exports = function(app) {
-	function writeToDB(notes){
+
+	function writeToDB(notes) {
         // Converts new JSON Array back to string
         notes = JSON.stringify(notes);
         console.log (notes);
         // Writes String back to db.json
-        fs.writeFileSync("./db/db.json", notes, function(err){
+        fs.writeFileSync("./db/db.json", notes, function(err) {
             if (err) {
                 return console.log(err);
             }
         });
 	}
-}
+
 
 // API call response for all inputted notes, and send results to the browser as an array of object
 app.get("/api/notes", function (req, res) {
@@ -57,27 +58,25 @@ app.post("/api/notes", function (req, res) {
 	res.json(req.body);
 });
 
-// API to delete individual notes from the json file
-app.delete('/api/notes/:id', function (req, res) {
-	let deleteId = req.params.id;
-	console.log(req.params.id);
-	
-	fs.readFile('./db/db.json', 'utf8', (err, data) => {
-		let dataArray = JSON.parse(data);
+// API to delete individual notes from JSON file
+app.delete("/api/notes/:id", function (req, res) {
 
-		dataArray = dataArray.filter(function (note) {
-			return note.id != deleteId;
-		});
+    // Goes through notesArray searching for matching ID
+    for (i=0; i < notesData.length; i++) {
+           
+        if (notesData[i].id == id) {
+            console.log("Deleted!");
+            // Responds with deleted note
+            res.send(notesData[i]);
 
-		let newDataString = JSON.stringify(dataArray);
+            // Removes the deleted note
+            notesData.splice(i,1);
+            break;
+        }
+    }
 
-		fs.writeFile('./db/db.json', newDataString, function (err) {
-			if (err) throw err;
-			console.log('Note deleted.');
-		});
-	});
-
-	res.sendFile(path.join(__dirname, './db/db.json'))
+	// Write notes data to database
+	writeToDB(notesData);
 });
 
 // Get homepage when the 'GetStarted' button is clicked
@@ -94,3 +93,5 @@ app.get("*", function (req, res) {
 app.listen(PORT, function() {
     console.log(`Server listening on ${PORT}.`)
 });
+
+};
