@@ -19,9 +19,6 @@ app.use(express.static(path.join(__dirname, './public')));
 
 const id = 0;
 
-
-// ========== API ROUTES ==========
-
 // API call response for all inputted notes, and send results to the browser as an array of object
 app.get("/api/notes", function (req, res) {
     res.sendFile(path.join(__dirname, './db/db.json'));
@@ -64,10 +61,6 @@ app.post("/api/notes", function (req, res) {
 	res.sendFile(path.join(__dirname, './db/db.json'));
 });
 
-
-// ========== HTML ROUTES ==========
-
-// The below points our server to set up routes
 // Get homepage when the 'GetStarted' button is clicked
 app.get("/notes", function (req, res) {
     res.sendFile(path.join(__dirname, "./public/notes.html"));
@@ -81,9 +74,6 @@ app.get("/", function (req, res) {
 app.get("*", function (req, res) {
 	res.sendFile(path.join(__dirname, "./public/index.html"));
 });
-
-
-// ========== LISTEN ========== 
 
 // Start the server on the port
 app.listen(PORT, function() {
