@@ -15,10 +15,10 @@ app.use(express.json());
 app.use(express.static("public"));
 
 // Include js files
-require("./routes/api.js")(app);
-require("./routes/html.js")(app);
+require("./routes/api")(app);
+require("./routes/html")(app);
 
 // Start the server on the port
 app.listen(PORT, function() {
-    console.log(`Server listening on ${PORT}.`)
+    console.log(`Server listening on PORT: ${PORT}.`)
 });

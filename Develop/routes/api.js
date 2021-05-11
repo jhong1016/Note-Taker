@@ -1,7 +1,10 @@
 // Require fs to read and write to files
-const fs = require('fs');
-const notesData = require("../db/db.json");
+const fs = require("fs");
 
+// Imported 'uuid' npm package for unique id
+const { v4: uuidv4 } = require('uuid');
+
+// Routing
 module.exports = function(app) {
 
 	function writeToDB(notes) {
@@ -9,7 +12,7 @@ module.exports = function(app) {
         notes = JSON.stringify(notes);
         console.log (notes);
         // Writes string back to db.json
-        fs.writeFileSync("../db/db.json", notes, function(err){
+        fs.writeFileSync("./db/db.json", notes, function(err) {
             if (err) {
                 return console.log(err);
             }
@@ -17,12 +20,12 @@ module.exports = function(app) {
     }
 
     // API call response for all inputted notes, and send results to the browser as an array of object
-    app.get("/api/notes", function (req, res) {
+    app.get("/api/notes", function(req, res) {
         res.json(notesData);
     });
 
     // API to write all newly inputted notes to JSON file
-    app.post("/api/notes", function (req, res) {
+    app.post("/api/notes", function(req, res) {
 
         // Set unique id to entry
         if (notesData.length == 0) {

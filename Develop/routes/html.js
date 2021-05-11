@@ -1,6 +1,7 @@
 // Require path for filename paths
 const path = require("path");
 
+// Routing
 module.exports = function(app) {
 
     // Get homepage when the 'GetStarted' button is clicked
