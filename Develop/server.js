@@ -26,7 +26,7 @@ app.get("/api/notes", function (req, res) {
 		// reads the notes from the json file
 		notesData = fs.readFileSync("./db/db.json", "utf8");
 		console.log("Add your note.");
-		// parse it so notes is an array of objects
+		// parse the data to get an array of objects
 		notesData = JSON.parse(notesData);
 
 	// handles errors
@@ -35,47 +35,38 @@ app.get("/api/notes", function (req, res) {
 		console.log(err);
 	}
 
-	//   send objects to the browser
+	// send objects to the browser
 	res.json(notesData);
 });
 
 // API to write all newly inputted notes to the json file
 app.post("/api/notes", function (req, res) {
-
-    let newNote = JSON.stringify(req.body);
-
-	fs.readFile('./db/db.json', 'utf8', (err, data) => {
+	try {
+		// reads the json file
+		notesData = fs.readFileSync("./db/db.json", "utf8");
+		console.log(notesData);
+	
+		// parse the data to get an array of objects
+		notesData = JSON.parse(notesData);
+		// set new notes by using id
+		req.body.id = notesData.length;
+		// add new notes to the array of objects
+		notesData.push(req.body);
+		// make it string(stringify) to write to json file
+		notesData = JSON.stringify(notesData);
+		// writes new notes to jason file
+		fs.writeFile("./db/db.json", notesData, "utf8", function(err) {
+		// handles errors
 		if (err) throw err;
-
-		let dataArray = JSON.parse(data);
-		let lastNoteId = dataArray[dataArray.length - 1].id;
-
-		if (lastNoteId === undefined ){
-			lastNoteId = 0;
-		}
-		console.log("last note id", lastNoteId);
-
-		let newId = lastNoteId + 1;
-		console.log("new ID", newId);
-
-		newNote = '{' + `"id":${newId},` + newNote.substr(1);
-		let newNoteJSON = JSON.parse(newNote);
-		console.log('newNoteJSON', newNoteJSON);
-		
-		console.log('dataArray', dataArray);
-		dataArray.push(newNoteJSON);
-		console.log('updated dataArray', dataArray);
-
-		let newDataString = JSON.stringify(dataArray);
-		console.log(newDataString);
-
-		fs.writeFile('./db/db.json', newDataString, function (err) {
-			if (err) throw err;
-			console.log('Note saved.');
 		});
-	});
-
-	res.sendFile(path.join(__dirname, './db/db.json'));
+		// change data back to an array of objects
+		res.json(JSON.parse(notesData));
+	
+	// handles errors
+	} catch (err) {
+	throw err;
+	console.error(err);
+	}
 });
 
 // API to delete individual notes from the json file
