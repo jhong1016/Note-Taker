@@ -8,17 +8,17 @@ const app = express();
 const PORT = process.env.PORT || 8000;
 
 // Sets express server to handle data parsing
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 app.use(express.json());
+
+// Include js files
+require("./routes/apiRoutes")(app);
+require("./routes/htmlRoutes")(app);
 
 // Access files in "public" directory
 app.use(express.static("public"));
 
-// Include js files
-require("./routes/api")(app);
-require("./routes/html")(app);
-
 // Start the server on the port
 app.listen(PORT, function() {
-    console.log(`Server listening on PORT: ${PORT}.`)
+    console.log("App listening on PORT: " + PORT);
 });
