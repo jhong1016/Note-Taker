@@ -13,8 +13,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Sets express server to handle data parsing
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 // Serve static files 
 app.use(express.static(path.join(__dirname, './public')));
 
