@@ -1,15 +1,15 @@
 // Require express to interact with the front end
-var express = require("express");
+const express = require("express");
 // Require path for filename paths
-var path = require("path");
+const path = require("path");
 // Require fs to read and write to files
-var fs = require('fs');
+const fs = require('fs');
+// Location to store inputte dnotes
+const db = require("./db/db.json");
 
 // Creates express server and set initial port
-var app = express();
-var PORT = process.env.PORT || 3000;
-
-const id = 0;
+const app = express();
+const PORT = process.env.PORT || 3000;
 
 // Sets express server to handle data parsing
 app.use(express.json())
@@ -17,23 +17,7 @@ app.use(express.urlencoded({ extended: true }))
 // Serve static files 
 app.use(express.static(path.join(__dirname, './public')));
 
-
-// ========== HTML ROUTES ==========
-
-// The below points our server to set up routes
-// Get homepage when the 'GetStarted' button is clicked
-app.get("/notes", function (req, res) {
-    res.sendFile(path.join(__dirname, "./public/notes.html"));
-});
-
-app.get("/", function (req, res) {
-    res.sendFile(path.join(__dirname, "./public/index.html"));
-});
-
-// If no matching route is found default to homepage
-app.get("*", function (req, res) {
-	res.sendFile(path.join(__dirname, "./public/index.html"));
-});
+const id = 0;
 
 
 // ========== API ROUTES ==========
@@ -78,6 +62,24 @@ app.post("/api/notes", function (req, res) {
 	});
 
 	res.sendFile(path.join(__dirname, './db/db.json'));
+});
+
+
+// ========== HTML ROUTES ==========
+
+// The below points our server to set up routes
+// Get homepage when the 'GetStarted' button is clicked
+app.get("/notes", function (req, res) {
+    res.sendFile(path.join(__dirname, "./public/notes.html"));
+});
+
+app.get("/", function (req, res) {
+    res.sendFile(path.join(__dirname, "./public/index.html"));
+});
+
+// If no matching route is found default to homepage
+app.get("*", function (req, res) {
+	res.sendFile(path.join(__dirname, "./public/index.html"));
 });
 
 
