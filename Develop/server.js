@@ -12,8 +12,8 @@ const app = express();
 const PORT = process.env.PORT || 8000;
 
 // Sets express server to handle data parsing
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, './public')));
 
 const id = 0;
@@ -61,7 +61,7 @@ app.post("/api/notes", function (req, res) {
 	res.sendFile(path.join(__dirname, './db/db.json'));
 });
 
-// API to delete individual notes in json file
+// Delete function
 app.delete('/api/notes/:id', function (req, res) {
 	var deleteId = req.params.id;
 	console.log(req.params.id);
