@@ -26,7 +26,7 @@ app.get("/api/notes", function (req, res) {
 
 // API to write all newly inputted notes to the json file
 app.post("/api/notes", function (req, res) {
-    var newNote = JSON.stringify(req.body);
+    let newNote = JSON.stringify(req.body);
 
     fs.readFile('./db/db.json', 'utf8', (err, data) => {
 		if (err) throw err;
@@ -63,7 +63,7 @@ app.post("/api/notes", function (req, res) {
 
 // API to delete individual notes
 app.delete('/api/notes/:id', function (req, res) {
-	var deleteId = req.params.id;
+	let deleteId = req.params.id;
     console.log(req.params.id);
 
 	fs.readFile('./db/db.json', 'utf8', (err, data) => {
