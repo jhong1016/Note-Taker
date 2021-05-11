@@ -29,14 +29,14 @@ app.get("/api/notes", function (req, res) {
 		// parse the data to get an array of objects
 		notesData = JSON.parse(notesData);
 
-	// handles errors
-	} catch (err) {
-		console.log("\n error (in app.get.catch):");
-		console.log(err);
-	}
+		// handles errors
+		} catch (err) {
+			console.log("\n error (in app.get.catch):");
+			console.log(err);
+		}
 
-	// send objects to the browser
-	res.json(notesData);
+		// send objects to the browser
+		res.json(notesData);
 });
 
 // API to write all newly inputted notes to the json file
@@ -45,7 +45,6 @@ app.post("/api/notes", function (req, res) {
 		// reads the json file
 		notesData = fs.readFileSync("./db/db.json", "utf8");
 		console.log(notesData);
-	
 		// parse the data to get an array of objects
 		notesData = JSON.parse(notesData);
 		// set new notes by using id
@@ -62,34 +61,39 @@ app.post("/api/notes", function (req, res) {
 		// change data back to an array of objects
 		res.json(JSON.parse(notesData));
 	
-	// handles errors
-	} catch (err) {
-	throw err;
-	console.error(err);
-	}
+		// handles errors
+		} catch (err) {
+		throw err;
+		console.error(err);
+		}
 });
 
 // API to delete individual notes from the json file
 app.delete('/api/notes/:id', function (req, res) {
-	let deleteId = req.params.id;
-	console.log(req.params.id);
+	try {
+		// reads the json file
+		notesData = fs.readFileSync("./db/db.json", "utf8");
+		// parse data to get an array of the objects
+		notesData = JSON.parse(notesData);
+		// delete selected note from the array
+		notesData = notesData.filter(function(note) {
+		return note.id != req.params.id;
+		});
+		// make it string(stringify) to write to json file
+		notesData = JSON.stringify(notesData);
+		// write new notes to the file
+		fs.writeFile("./db/db.json", notesData, "utf8", function(err) {
+		// error handling
+		if (err) throw err;
+		});
+		// change data back to an array of objects
+		res.send(JSON.parse(notesData));
 	
-	fs.readFile('./db/db.json', 'utf8', (err, data) => {
-		let dataArray = JSON.parse(data);
-
-		dataArray = dataArray.filter(function (note) {
-			return note.id != deleteId;
-		});
-
-		let newDataString = JSON.stringify(dataArray);
-
-		fs.writeFile('./db/db.json', newDataString, function (err) {
-			if (err) throw err;
-			console.log('Note deleted.');
-		});
-	});
-
-	res.sendFile(path.join(__dirname, './db/db.json'))
+		// handles errors
+		} catch (err) {
+		throw err;
+		console.error(err);
+		}
 });
 
 // Get homepage when the 'GetStarted' button is clicked
@@ -97,13 +101,13 @@ app.get("/notes", function (req, res) {
     res.sendFile(path.join(__dirname, "./public/notes.html"));
 });
 
-app.get("/", function (req, res) {
-    res.sendFile(path.join(__dirname, "./public/index.html"));
-});
-
 // If no matching route is found default to homepage
 app.get("*", function (req, res) {
 	res.sendFile(path.join(__dirname, "./public/index.html"));
+});
+
+app.get("/api/notes", function(req, res) {
+	return res.sendFile(path.json(__dirname, "./db/db.json"));
 });
 
 // Start the server on the port
